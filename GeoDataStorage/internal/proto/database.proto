@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package databaseservice;
+
+option go_package = "./internal/proto/pb";
+
+message Location {
+  double latitude = 1;
+  double longitude = 2;
+}
+
+message LocationRequest {
+  Location location = 1;
+}
+
+message LocationResponse {
+  int32 id = 1;
+}
+
+service DatabaseService {
+  rpc SaveLocation(LocationRequest) returns (LocationResponse);
+}
