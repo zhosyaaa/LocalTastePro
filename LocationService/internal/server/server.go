@@ -10,11 +10,11 @@ import (
 )
 
 type Server struct {
-	pb.UnimplementedLocationServiceServer
-	service repositories.LocationService
+	pb.RecommendationServiceServer
+	service repositories.LocationRepoImpl
 }
 
-func NewServer(service repositories.LocationService) *Server {
+func NewServer(service repositories.LocationRepoImpl) *Server {
 	return &Server{service: service}
 }
 
@@ -23,17 +23,31 @@ func (s *Server) SendLocation(ctx context.Context, req *pb.LocationRequest) (*pb
 		Latitude:  req.Location.Latitude,
 		Longitude: req.Location.Longitude,
 	}
-	location, err := s.service.Create(location)
+	location, err := s.service.CreateLocation(location)
 	if err != nil {
 		log.Fatalf("Failed to created location: %v", err)
+		return nil, err
 	}
 	recommendations, err := client.GetRecommendations(req.Location)
 	if err != nil {
 		log.Printf("Failed to get recommendations: %v", err)
+		return nil, err
+	}
+
+	for i := 0; i < len(recommendations); i++ {
+		restaurant := &models.Restaurant{
+			Name: recommendations[i].Name,
+			Address: models.Location{
+				Latitude:  recommendations[i].Address.Latitude,
+				Longitude: recommendations[i].Address.Longitude,
+			},
+			Distance: float64(recommendations[i].Distance),
+		}
+		s.service.CreateRestaurants(restaurant)
 	}
 
 	response := &pb.LocationResponse{
-		Id:         int32(location.ID),
+		Location:   req.Location,
 		Recomendet: recommendations,
 	}
 

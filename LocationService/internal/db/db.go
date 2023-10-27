@@ -21,7 +21,7 @@ func InitDatabase() {
 		log.Error().Err(err).Msg("Error connecting to database")
 		return
 	}
-	db.AutoMigrate(&models.Location{})
+	db.AutoMigrate(&models.Location{}, &models.Restaurant{})
 	DB = db
 	log.Info().Msg("Connected to the database")
 }

@@ -7,20 +7,10 @@ message Location {
   double longitude = 2;
 }
 
-message LocationRequest {
-  Location location = 1;
-}
-
-message LocationResponse {
-  int32 id = 1;
-  repeated Recommendation recomendet = 2;
-}
-
 message Recommendation {
   string name = 1;
-  string description = 2;
-  string category = 3;
-  repeated string tags = 4;
+  Location address = 2;
+  float distance = 3;
 }
 
 message RecommendationRequest {
@@ -30,11 +20,6 @@ message RecommendationRequest {
 message RecommendationResponse {
   repeated Recommendation recommendations = 1;
 }
-
-service LocationService {
-  rpc SendLocation(LocationRequest) returns (LocationResponse);
-}
-
 service RecommendationService {
   rpc GetRecommendations(RecommendationRequest) returns (RecommendationResponse);
 }

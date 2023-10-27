@@ -5,17 +5,23 @@ import (
 	"gorm.io/gorm"
 )
 
-type LocationService struct {
+type LocationRepoImpl struct {
 	db gorm.DB
 }
 
-func NewLocationService(db gorm.DB) *LocationService {
-	return &LocationService{db: db}
+func NewLocationRepoImpl(db gorm.DB) *LocationRepoImpl {
+	return &LocationRepoImpl{db: db}
 }
-
-func (l LocationService) Create(location *models.Location) (*models.Location, error) {
+func (l LocationRepoImpl) CreateLocation(location *models.Location) (*models.Location, error) {
 	if err := l.db.Create(location).Error; err != nil {
 		return nil, err
 	}
 	return location, nil
+}
+
+func (l LocationRepoImpl) CreateRestaurants(rest *models.Restaurant) (*models.Restaurant, error) {
+	if err := l.db.Create(rest).Error; err != nil {
+		return nil, err
+	}
+	return rest, nil
 }

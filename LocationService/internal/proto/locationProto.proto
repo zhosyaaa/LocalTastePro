@@ -12,15 +12,14 @@ message LocationRequest {
 }
 
 message LocationResponse {
-  int32 id = 1;
+  Location location = 1;
   repeated Recommendation recomendet = 2;
 }
 
 message Recommendation {
   string name = 1;
-  string description = 2;
-  string category = 3;
-  repeated string tags = 4;
+  Location address = 2;
+  float distance = 3;
 }
 
 message RecommendationRequest {
