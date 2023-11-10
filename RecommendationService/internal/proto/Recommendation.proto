@@ -9,8 +9,9 @@ message Location {
 
 message Recommendation {
   string name = 1;
-  Location address = 2;
-  float distance = 3;
+  string address = 2;
+  string description = 3;
+  string stars = 4;
 }
 
 message RecommendationRequest {
